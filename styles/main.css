@@ -1,0 +1,16 @@
+ul,li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+    margin: 0 0 1rem 0;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+img {
+    height: 10rem;
+    padding-right: 1rem;
+}

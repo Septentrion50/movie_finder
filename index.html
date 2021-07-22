@@ -10,11 +10,49 @@
         <link rel="stylesheet" href="./styles/main.css">
     </head>
     <body>
+        <!-- Search Form -->
+        
+        <!-- List -->
         <div class="container mt-5">
             <h1>Movie Finder</h1>
+            <ul id="search-list" class="mt-5"></ul>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" 
+            id="infos-modal" 
+            tabindex="-1" 
+            aria-labelledby="movie-title" 
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" 
+                            id="movie-title">TITRE</h3>
+                        <button type="button" 
+                                class="btn-close" 
+                                data-bs-dismiss="modal" 
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 id="release-date">date</h6>
+                        <p id="plot">infos</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" 
+                                class="btn btn-secondary" 
+                                data-bs-dismiss="modal">Close</button>
+                        <button type="button" 
+                                class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- SCRIPTS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+                crossorigin="anonymous"></script>
         <script src="./scripts/api_key.js"></script>
         <script src="./scripts/main.js"></script>
     </body>
