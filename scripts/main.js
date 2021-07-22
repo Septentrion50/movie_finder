@@ -1,7 +1,7 @@
 class MovieFinder {
     constructor() {
         this.getUrl = '';
-        this.lazy = document.querySelectorAll('.lazy');
+        this.lazy = ''; 
         this.form = document.getElementById('search-movies-form');
         this.inputSearch = document.getElementById('movie-search');
         this.btnElt = document.getElementsByClassName('btn-modal');
@@ -15,7 +15,6 @@ class MovieFinder {
     async showMovies() {
         let data = await this.getData();
         await this.listData(data.Search);
-        //console.log('==>', data);
     }
 
     async getData() {
@@ -44,52 +43,34 @@ class MovieFinder {
         });
     }
 
-    async observerElements() {
-        const arr = document.querySelectorAll('.lazy');
-        // const imageObserver = new IntersectionObserver((entries, imgObserver) => {
-        //     console.log(">>> 1 ");
-        //     entries.forEach((entry) => {
-        //         console.log(">>> 2 forEach");
-        //         if (entry.isIntersecting) {
-        //             const lazyImage = entry.target;
-        //             console.log("lazy loading ", lazyImage);
-        //             lazyImage.src = lazyImage.dataset.src;
-        //             lazyImage.classList.remove("lazy");
-        //             imgObserver.unobserve(lazyImage);
-        //         }
-        //     })
-        // });
-        // arr.forEach(v => {
-        //     imageObserver.observe(v);
-        // });
-        const imageObserver = await new IntersectionObserver((entries, imgObserver) => {
-            console.log(">>> 1 ");
-            entries.forEach(entry => {
-                console.log(">>> 2 forEach");
-                if (entry.isIntersectionRatio > 0) {
-                    const lazyItem = entry.target;
-                    lazyItem.classList.remove('opacity-0');
-                    console.log("lazy loading ", lazyItem);
-                    imageObserver.unobserve(lazyImage);
-                }
-            })
-        });
-        arr.forEach(a => {
-            console.log(">>> ",imageObserver);
-            a.classList.add('opacity-0');
-            imageObserver.observe(a);
-        });
+    observerElements() {
+        this.lazy = document.getElementsByClassName("lazy");
+        document.addEventListener('scroll', () => {
+            const imageObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.intersectionRatio > 0.5) {
+                        let lazyItem = entry.target;
+                        lazyItem.classList.remove('opacity-0');
+                        imageObserver.unobserve(lazyItem);
+                        lazyItem.classList.remove('lazy');
+                    }
+                })
+            });
+
+            for (let i = 0; i < this.lazy.length; i++){
+                this.lazy[i].classList.add('opacity-0');
+                imageObserver.observe(this.lazy[i]);
+            };
+        })
     }
 
     async listenReadMore() {
-        //console.log('->', this.btnElt);
         this.searchList.addEventListener('click', async (e) => {
             e.preventDefault();
             if (e.target.classList.contains('btn-modal')) {
                 const id = e.target.id;
                 const movieData = await this.getModalData(id);
                 this.populateModal(movieData);
-                //console.log('->', movieData);
             }
         });
     }
@@ -103,13 +84,14 @@ class MovieFinder {
 
             this.showMovies();
             this.listenReadMore();
+            this.observerElements();
         });
     }
 
     populateTemplate(data) {
         let content = `
-            <li class="card lazy opacity-0">
-                <img src="./img/placeholder.jpg" data-src="${data.Poster}.png" alt="${data.Title}" class="">
+            <li class="card lazy">
+                <img src="${data.Poster}.png" alt="${data.Title}" class="">
                 <div class="card-body">
                     <h5 class="card-title">${data.Title}</h5>
                     <p class="card-text">${data.Year}</p>
@@ -133,5 +115,5 @@ class MovieFinder {
 document.addEventListener('DOMContentLoaded', () => {
     const movieFinder = new MovieFinder();
     movieFinder.listenQuery();
-    movieFinder.observerElements();
 });
+
