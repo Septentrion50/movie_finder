@@ -38,7 +38,7 @@ class MovieFinder {
 
     async listData(data) {
         this.searchList.innerHTML = '';
-        await data.map(record => {
+        data.map(record => {
             this.searchList.innerHTML += this.populateTemplate(record);
         });
     }
