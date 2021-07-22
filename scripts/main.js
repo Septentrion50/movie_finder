@@ -1,8 +1,7 @@
 class MovieFinder {
     constructor() {
-        //this.getUrl = `http://www.omdbapi.com/?i=tt3896198&apikey=${apiKey.omdb}`;
-        this.getUrl = '';//`http://www.omdbapi.com/?s=potter&type=movie&apikey=${apiKey.omdb}&`
-        this.postUrl = `http://img.omdbapi.com/?apikey=${apiKey.omdb}&`;
+        this.getUrl = '';
+        this.lazy = document.querySelectorAll('.lazy');
         this.form = document.getElementById('search-movies-form');
         this.inputSearch = document.getElementById('movie-search');
         this.btnElt = document.getElementsByClassName('btn-modal');
@@ -16,7 +15,7 @@ class MovieFinder {
     async showMovies() {
         let data = await this.getData();
         await this.listData(data.Search);
-        console.log('==>', data);
+        //console.log('==>', data);
     }
 
     async getData() {
@@ -45,15 +44,35 @@ class MovieFinder {
         });
     }
 
+    observerElements() {
+        const arr = document.querySelectorAll('img.lazy');
+        const imageObserver = new IntersectionObserver((entries, imgObserver) => {
+            console.log(">>> 1 ");
+            entries.forEach((entry) => {
+                console.log(">>> 2 forEach");
+                if (entry.isIntersecting) {
+                    const lazyImage = entry.target;
+                    console.log("lazy loading ", lazyImage);
+                    lazyImage.src = lazyImage.dataset.src;
+                    lazyImage.classList.remove("lazy");
+                    imgObserver.unobserve(lazyImage);
+                }
+            })
+        });
+        arr.forEach(v => {
+            imageObserver.observe(v);
+        });
+    }
+
     async listenReadMore() {
-        console.log('->', this.btnElt);
+        //console.log('->', this.btnElt);
         this.searchList.addEventListener('click', async (e) => {
             e.preventDefault();
             if (e.target.classList.contains('btn-modal')) {
                 const id = e.target.id;
                 const movieData = await this.getModalData(id);
                 this.populateModal(movieData);
-                console.log('->', movieData);
+                //console.log('->', movieData);
             }
         });
     }
@@ -73,7 +92,7 @@ class MovieFinder {
     populateTemplate(data) {
         let content = `
             <li class="card">
-                <img src="${data.Poster}.png" alt="${data.Title}">
+                <img src="./img/placeholder.jpg" data-src="${data.Poster}.png" alt="${data.Title}" class="lazy">
                 <div class="card-body">
                     <h5 class="card-title">${data.Title}</h5>
                     <p class="card-text">${data.Year}</p>
@@ -97,4 +116,5 @@ class MovieFinder {
 document.addEventListener('DOMContentLoaded', () => {
     const movieFinder = new MovieFinder();
     movieFinder.listenQuery();
+    movieFinder.observerElements();
 });
