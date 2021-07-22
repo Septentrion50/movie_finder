@@ -27,7 +27,7 @@ class MovieFinder {
     }
 
     async getModalData(imdb) {
-        let url = `http://www.omdbapi.com/?i=${imdb}&apikey=${apiKey.omdb}`;
+        let url = `http://www.omdbapi.com/?i=${imdb}&apikey=973f03ea`;
         let result = '';
         const data = await fetch(url)
             .then(res => res.json())
@@ -80,7 +80,7 @@ class MovieFinder {
             e.preventDefault();
             const val = this.inputSearch.value.split(' ');
             const query = val.join('+');
-            this.getUrl = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey.omdb}&`;
+            this.getUrl = `http://www.omdbapi.com/?s=${query}&apikey=973f03ea`;
 
             this.showMovies();
             this.listenReadMore();
