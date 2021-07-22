@@ -10,11 +10,26 @@
         <link rel="stylesheet" href="./styles/main.css">
     </head>
     <body>
-        <!-- Search Form -->
-        
-        <!-- List -->
         <div class="container mt-5">
             <h1>Movie Finder</h1>
+
+            <!-- Search Form -->
+            <form class="row gx-3 gy-2 align-items-center mt-5">
+                <div class="col-auto">
+                    <div class="form-check">
+                        <label class="visually-hidden" for="movie-search">Name</label>
+                        <input type="text" 
+                                class="form-control" 
+                                id="movie-search" 
+                                placeholder="Harry Potter">
+                    </div>
+                    </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            <!-- List -->
             <ul id="search-list" class="mt-5"></ul>
         </div>
 
