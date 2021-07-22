@@ -12,9 +12,37 @@ ul,li {
 
 img {
     height: 10rem;
-    padding-right: 1rem;
 }
 
 .form-check {
     padding-left: 0;
+}
+
+.modal-content {
+    padding: 1rem 1.5rem;
+    flex-direction: row;
+}
+
+.modal-left {
+    display: flex;
+    align-items: center;
+}
+
+.modal-header {
+    padding-bottom: 0;
+    align-items: flex-start;
+    border-bottom: 0;
+}
+
+.modal-body p {
+    line-height: 1.25;
+}
+
+.modal-title {
+    font-size: 1.2rem;
+    line-height: 1.25;
+}
+
+#poster {
+    height: 20rem;
 }

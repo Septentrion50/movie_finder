@@ -5,8 +5,9 @@ class MovieFinder {
         this.postUrl = `http://img.omdbapi.com/?apikey=${apiKey.omdb}&`;
         this.form = document.getElementById('search-movies-form');
         this.inputSearch = document.getElementById('movie-search');
-        this.btnElt = document.querySelectorAll('.btn-modal');
+        this.btnElt = document.getElementsByClassName('btn-modal');
         this.searchList = document.getElementById('search-list');
+        this.poster = document.getElementById('poster');
         this.movieTitle = document.getElementById('movie-title');
         this.releaseDate = document.getElementById('release-date');
         this.plot = document.getElementById('plot');
@@ -44,6 +45,31 @@ class MovieFinder {
         });
     }
 
+    async listenReadMore() {
+        console.log('->', this.btnElt);
+        this.searchList.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains('btn-modal')) {
+                const id = e.target.id;
+                const movieData = await this.getModalData(id);
+                this.populateModal(movieData);
+                console.log('->', movieData);
+            }
+        });
+    }
+
+    async listenQuery() {
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = this.inputSearch.value.split(' ');
+            const query = val.join('+');
+            this.getUrl = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey.omdb}&`;
+
+            this.showMovies();
+            this.listenReadMore();
+        });
+    }
+
     populateTemplate(data) {
         let content = `
             <li class="card">
@@ -51,7 +77,7 @@ class MovieFinder {
                 <div class="card-body">
                     <h5 class="card-title">${data.Title}</h5>
                     <p class="card-text">${data.Year}</p>
-                    <a href="#" class="btn btn-primary btn-modal" id="${data.imdbID}">Read More</a>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#infos-modal" class="btn btn-primary btn-modal" id="${data.imdbID}">Read More</button>
                 </div>
             </li>
         `;
@@ -59,23 +85,10 @@ class MovieFinder {
     }
 
     populateModal(data) {
-        this.btnElt.forEach(btn => {
-            btnElt.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
-        })
-    }
-
-    listenQuery() {
-        this.form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const val = this.inputSearch.value.split(' ');
-            const query = val.join('+');
-            this.getUrl = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey.omdb}&`;
-            console.log('--->', query);
-
-            this.showMovies();
-        });
+        this.poster.setAttribute('src', data.Poster);
+        this.movieTitle.innerText = data.Title;
+        this.releaseDate.innerText = data.Released;
+        this.plot.innerText = data.Plot;
     }
 }
 
