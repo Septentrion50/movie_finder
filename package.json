@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Septentrion50/movie_finder/issues"
   },
-  "homepage": "https://github.com/Septentrion50/movie_finder#readme"
+  "homepage": "https://github.com/Septentrion50/movie_finder#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  }
 }
