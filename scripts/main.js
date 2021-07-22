@@ -1,8 +1,10 @@
 class MovieFinder {
     constructor() {
         //this.getUrl = `http://www.omdbapi.com/?i=tt3896198&apikey=${apiKey.omdb}`;
-        this.getUrl = `http://www.omdbapi.com/?s=potter&type=movie&apikey=${apiKey.omdb}&`;
+        this.getUrl = '';//`http://www.omdbapi.com/?s=potter&type=movie&apikey=${apiKey.omdb}&`
         this.postUrl = `http://img.omdbapi.com/?apikey=${apiKey.omdb}&`;
+        this.form = document.getElementById('search-movies-form');
+        this.inputSearch = document.getElementById('movie-search');
         this.btnElt = document.querySelectorAll('.btn-modal');
         this.searchList = document.getElementById('search-list');
         this.movieTitle = document.getElementById('movie-title');
@@ -10,7 +12,7 @@ class MovieFinder {
         this.plot = document.getElementById('plot');
     }
 
-    async showMovie() {
+    async showMovies() {
         let data = await this.getData();
         await this.listData(data.Search);
         console.log('==>', data);
@@ -63,11 +65,23 @@ class MovieFinder {
             });
         })
     }
+
+    listenQuery() {
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = this.inputSearch.value.split(' ');
+            const query = val.join('+');
+            this.getUrl = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey.omdb}&`;
+            console.log('--->', query);
+
+            this.showMovies();
+        });
+    }
 }
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
     const movieFinder = new MovieFinder();
-    movieFinder.showMovie();
+    movieFinder.listenQuery();
 });
