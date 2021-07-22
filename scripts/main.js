@@ -44,23 +44,40 @@ class MovieFinder {
         });
     }
 
-    observerElements() {
-        const arr = document.querySelectorAll('img.lazy');
-        const imageObserver = new IntersectionObserver((entries, imgObserver) => {
+    async observerElements() {
+        const arr = document.querySelectorAll('.lazy');
+        // const imageObserver = new IntersectionObserver((entries, imgObserver) => {
+        //     console.log(">>> 1 ");
+        //     entries.forEach((entry) => {
+        //         console.log(">>> 2 forEach");
+        //         if (entry.isIntersecting) {
+        //             const lazyImage = entry.target;
+        //             console.log("lazy loading ", lazyImage);
+        //             lazyImage.src = lazyImage.dataset.src;
+        //             lazyImage.classList.remove("lazy");
+        //             imgObserver.unobserve(lazyImage);
+        //         }
+        //     })
+        // });
+        // arr.forEach(v => {
+        //     imageObserver.observe(v);
+        // });
+        const imageObserver = await new IntersectionObserver((entries, imgObserver) => {
             console.log(">>> 1 ");
-            entries.forEach((entry) => {
+            entries.forEach(entry => {
                 console.log(">>> 2 forEach");
-                if (entry.isIntersecting) {
-                    const lazyImage = entry.target;
-                    console.log("lazy loading ", lazyImage);
-                    lazyImage.src = lazyImage.dataset.src;
-                    lazyImage.classList.remove("lazy");
-                    imgObserver.unobserve(lazyImage);
+                if (entry.isIntersectionRatio > 0) {
+                    const lazyItem = entry.target;
+                    lazyItem.classList.remove('opacity-0');
+                    console.log("lazy loading ", lazyItem);
+                    imageObserver.unobserve(lazyImage);
                 }
             })
         });
-        arr.forEach(v => {
-            imageObserver.observe(v);
+        arr.forEach(a => {
+            console.log(">>> ",imageObserver);
+            a.classList.add('opacity-0');
+            imageObserver.observe(a);
         });
     }
 
@@ -91,8 +108,8 @@ class MovieFinder {
 
     populateTemplate(data) {
         let content = `
-            <li class="card">
-                <img src="./img/placeholder.jpg" data-src="${data.Poster}.png" alt="${data.Title}" class="lazy">
+            <li class="card lazy opacity-0">
+                <img src="./img/placeholder.jpg" data-src="${data.Poster}.png" alt="${data.Title}" class="">
                 <div class="card-body">
                     <h5 class="card-title">${data.Title}</h5>
                     <p class="card-text">${data.Year}</p>
